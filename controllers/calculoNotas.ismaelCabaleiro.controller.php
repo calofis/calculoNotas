@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 $data = [];
 
@@ -7,7 +8,7 @@ if (isset($_POST['enviar'])) {
     $data['input'] = filter_var_array($_POST);
     if (count($data['errores']) === 0) {
         $jsonArray = json_decode($_POST['json'], true);
-        $resultado = datosAsignaturas($jsonArray);
+        $resultado = sacarDatos($jsonArray);
         $data['resultado'] = $resultado;
     }
 }
@@ -51,6 +52,60 @@ function checkForm(array $post): array {
     return $errores;
 }
 
+function sacarDatos(array $materias): array {
+    $resultado = [];
+    $alumnos = [];
+    $promociona = [];
+    $noPromociona = [];
+
+    foreach ($materias as $materia => $notas) {
+        $resultado[$materia] = [];
+        $suspensos = 0;
+        $aprobados = 0;
+        $max = [
+            'alumno' => '',
+            'nota' => -1
+        ];
+        $min = [
+            'alumno' => '',
+            'nota' => 11
+        ];
+        $notaAcumulada = 0;
+        $contarAlumnos = 0;
+        foreach ($notas as $alumno => $nota) {
+            if (!isset($alumnos[$alumno])) {
+                $alumnos[$alumno] = ['aprobados' => 0, 'suspensos' => 0];
+            }
+            $contarAlumnos++;
+            $notaAcumulada += $nota;
+            if ($nota < 5) {
+                $suspensos++;
+                $alumnos[$alumno]['suspensos']++;
+            } else {
+                $aprobados++;
+                $alumnos[$alumno]['aprobados']++;
+            }
+            if ($nota > $max['nota']) {
+                $max['alumno'] = $alumno;
+                $max['nota'] = $nota;
+            }
+            if ($nota < $min['nota']) {
+                $min['alumno'] = $alumno;
+                $min['nota'] = $nota;
+            }
+        }
+        if ($contarAlumnos > 0) {
+            $resultado[$materia]['media'] = $notaAcumulada / $contarAlumnos;
+            $resultado[$materia]['max'] = $max;
+            $resultado[$materia]['min'] = $min;
+        } else {
+            $resultado[$materia]['media'] = 0;
+        }
+        $resultado[$materia]['suspensos'] = $suspensos;
+        $resultado[$materia]['aprobados'] = $aprobados;
+    }
+     return array('modulos' => $resultado, 'alumnos' => $alumnos);
+}
 
 include 'views/templates/header.php';
 include 'views/calculoNotas.ismaelCabaleiro.view.php';
