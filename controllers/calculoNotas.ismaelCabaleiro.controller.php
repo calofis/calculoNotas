@@ -74,25 +74,32 @@ function sacarDatos(array $materias): array {
         $contarAlumnos = 0;
         foreach ($notas as $alumno => $nota) {
             if (!isset($alumnos[$alumno])) {
-                $alumnos[$alumno] = ['aprobados' => 0, 'suspensos' => 0];
+                $alumnos[$alumno] = ['aprobados' => 0, 'suspensos' => 0, 'media' => 0];
             }
             $contarAlumnos++;
-            $notaAcumulada += $nota;
-            if ($nota < 5) {
+            $cantidadNotas = 0;
+            $sumaNotas = 0;
+            foreach ($nota as $puntuaciones => $a) {
+                $sumaNotas += $a;
+                $cantidadNotas++;
+            }
+            $alumnos[$alumno]['media'] = $sumaNotas / $cantidadNotas;
+            if ($$alumnos[$alumno]['media'] < 5) {
                 $suspensos++;
                 $alumnos[$alumno]['suspensos']++;
             } else {
                 $aprobados++;
                 $alumnos[$alumno]['aprobados']++;
             }
-            if ($nota > $max['nota']) {
+            if ($alumnos[$alumno]['media'] > $max['nota']) {
                 $max['alumno'] = $alumno;
-                $max['nota'] = $nota;
+                $max['nota'] = $a;
             }
-            if ($nota < $min['nota']) {
+            if ($alumnos[$alumno]['media'] < $min['nota']) {
                 $min['alumno'] = $alumno;
-                $min['nota'] = $nota;
+                $min['nota'] = $a;
             }
+            $notaAcumulada = $alumnos[$alumno]['media'];
         }
         if ($contarAlumnos > 0) {
             $resultado[$materia]['media'] = $notaAcumulada / $contarAlumnos;
