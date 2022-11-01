@@ -54,7 +54,7 @@
     if (isset($data['resultado'])) {
         ?>
         <!--Para parte 2 -->
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-6 col-12">
             <div class="alert alert-success">
                 <ol>
                     <?php
@@ -67,7 +67,7 @@
                 </ol>
             </div>
         </div>
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-6 col-12">
             <div class="alert alert-warning">
                 <ol>
                     <?php
@@ -80,7 +80,7 @@
                 </ol>
             </div>
         </div>
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-6 col-12">
             <div class="alert alert-primary">
                 <ol>
                     <?php
@@ -93,7 +93,7 @@
                 </ol>
             </div>
         </div>
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-6 col-12">
             <div class="alert alert-danger">
                 <ol>
                     <?php
