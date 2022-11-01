@@ -34,11 +34,17 @@ function checkForm(array $post): array {
                         if (empty($nombre)) {
                             $erroresJson .= "El módulo '" . htmlentities($modulo) . "' tiene un alumno sin nombre<br>";
                         }
-                        if (!is_int($nota)) {
-                            $erroresJson .= "El módulo '" . htmlentities($modulo) . "' tiene la nota de '" . htmlentities($nombre) . "' que no es un int<br>";
+                        if (!is_array($nota)) {
+                            $erroresJson .= "El alumno '" . htmlentities($nombre) . "' no tiene un array de notas<br>";
                         } else {
-                            if ($nota < 0 || $nota > 10) {
-                                $erroresJson .= "'El alumno '" . htmlentities($nombre) . " en el modulo '" . htmlentities($modulo) . "' tiene una nota de " . $nota . "<br>";
+                            foreach ($nota as $puntuaciones => $a) {
+                                if (!is_int($a)) {
+                                    $erroresJson .= "El módulo '" . htmlentities($modulo) . "' tiene una nota de '" . htmlentities($nombre) . "' que no es un int<br>";
+                                } else {
+                                    if ($a < 0 || $a > 10) {
+                                        $erroresJson .= "'El alumno '" . htmlentities($nombre) . " en el modulo '" . htmlentities($modulo) . "' tiene una nota de " . $a . "<br>";
+                                    }
+                                }
                             }
                         }
                     }
@@ -84,7 +90,7 @@ function sacarDatos(array $materias): array {
                 $cantidadNotas++;
             }
             $alumnos[$alumno]['media'] = $sumaNotas / $cantidadNotas;
-            if ($$alumnos[$alumno]['media'] < 5) {
+            if ($alumnos[$alumno]['media'] < 5) {
                 $suspensos++;
                 $alumnos[$alumno]['suspensos']++;
             } else {
@@ -99,7 +105,7 @@ function sacarDatos(array $materias): array {
                 $min['alumno'] = $alumno;
                 $min['nota'] = $a;
             }
-            $notaAcumulada = $alumnos[$alumno]['media'];
+            $notaAcumulada += $alumnos[$alumno]['media'];
         }
         if ($contarAlumnos > 0) {
             $resultado[$materia]['media'] = $notaAcumulada / $contarAlumnos;
