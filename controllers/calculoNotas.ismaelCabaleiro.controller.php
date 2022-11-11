@@ -38,8 +38,8 @@ function checkForm(array $post): array {
                             $erroresJson .= "El alumno '" . htmlentities($nombre) . "' no tiene un array de notas<br>";
                         } else {
                             foreach ($nota as $puntuaciones => $a) {
-                                if (!is_int($a)) {
-                                    $erroresJson .= "El módulo '" . htmlentities($modulo) . "' tiene una nota de '" . htmlentities($nombre) . "' que no es un int<br>";
+                                if (!is_numeric($a)) {
+                                    $erroresJson .= "El módulo '" . htmlentities($modulo) . "' tiene una nota de '" . htmlentities($nombre) . "' que no es un numero<br>";
                                 } else {
                                     if ($a < 0 || $a > 10) {
                                         $erroresJson .= "'El alumno '" . htmlentities($nombre) . " en el modulo '" . htmlentities($modulo) . "' tiene una nota de " . $a . "<br>";
